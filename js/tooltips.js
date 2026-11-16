@@ -50,6 +50,37 @@ const tooltips = {
     "Lost in the dark": "They both knew they would only go forward when next to each other. They vowed that they would always be together, earn a lot of money and move to a better place where they would be very happy.",
     "Omega": "ω",
 
+    // Underworld
+    "Pickpocket": "Slip through crowded markets relieving careless merchants of their loose coin.",
+    "Smuggler": "Move contraband past city gates under the cover of darkness.",
+    "Spy": "Gather secrets from rival courts and sell information to the highest bidder.",
+    "Assassin": "Eliminate high-profile targets with lethal precision.",
+    "Syndicate Boss": "Control the underground networks, gambling dens, and black markets of the realm.",
+    "Shadow King": "Rule the kingdom from the shadows; even monarchs fear your whisper.",
+
+    // Alchemy & Artificing
+    "Herb Gatherer": "Forage rare roots and glowing fungi from enchanted forests.",
+    "Apothecary": "Brew healing salves, tonics, and remedies for townsfolk and soldiers.",
+    "Alchemist": "Transmute base metals and distill potent arcane elixirs.",
+    "Golem Crafter": "Infuse stone and steel with living magic to forge tireless constructs.",
+    "Grand Artificer": "Design monumental arcane engines and relic-grade weaponry.",
+    "Philosopher": "Unlock the secrets of the Philosopher's Stone and eternal transmutation.",
+
+    // Celestial Order
+    "Acolyte": "Devote your mind to astral hymns and the study of higher planes.",
+    "Cleric": "Channel radiant energy to mend wounds and banish corruption.",
+    "Inquisitor": "Hunt down abyssal anomalies with unwavering zeal and sacred steel.",
+    "Archangel": "Ascend beyond mortal limits as a winged herald of celestial justice.",
+    "Seraph": "Burn with pure astral fire near the throne of creation.",
+    "Astral Sovereign": "Command legions of light across the cosmic tapestry.",
+
+    // Technomancy
+    "Scrap Tinkerer": "Salvage ancient relics and fuse gears with residual mana.",
+    "Clockwork Engineer": "Construct self-winding automata powered by condensed aether.",
+    "Aether Mechanic": "Calibrate dimensional turbines and reality-bending conduits.",
+    "Cyber-Mage": "Merge neural circuits with raw cosmic sorcery.",
+    "Singularity Architect": "Engineer artificial universes from compressed starlight and code.",
+
     // Fundamentals
     "Concentration": "Improve your learning speed through practising intense concentration activities.",
     "Productivity": "Learn to procrastinate less at work and receive more job experience per day.",

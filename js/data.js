@@ -425,6 +425,37 @@ const jobBaseData = {
     "Player One": { name: "Player One", maxXp: Infinity, income: 2.5e54, heroxp: 1200 },
     "Lost in the dark": { name: "Lost in the dark", maxXp: Infinity, income: 2.5e58, heroxp: 1358 },
     "Omega": { name: "Omega", maxXp: Infinity, income: 2.5e62, heroxp: 3120 },
+
+    // Underworld (Early/Mid-Game: alternativa rápida focada em ouro)
+    "Pickpocket": { name: "Pickpocket", maxXp: 150, income: 12, heroxp: 38 },
+    "Smuggler": { name: "Smuggler", maxXp: 600, income: 65, heroxp: 40 },
+    "Spy": { name: "Spy", maxXp: 5000, income: 220, heroxp: 52 },
+    "Assassin": { name: "Assassin", maxXp: 50000, income: 600, heroxp: 55 },
+    "Syndicate Boss": { name: "Syndicate Boss", maxXp: 500000, income: 2200, heroxp: 58 },
+    "Shadow King": { name: "Shadow King", maxXp: 5000000, income: 12000, heroxp: 63 },
+
+    // Alchemy & Artificing (Mid-Game: ponte entre Blacksmith e Arcane)
+    "Herb Gatherer": { name: "Herb Gatherer", maxXp: 2500, income: 180, heroxp: 42 },
+    "Apothecary": { name: "Apothecary", maxXp: 25000, income: 450, heroxp: 54 },
+    "Alchemist": { name: "Alchemist", maxXp: 250000, income: 1800, heroxp: 60 },
+    "Golem Crafter": { name: "Golem Crafter", maxXp: 2500000, income: 8500, heroxp: 78 },
+    "Grand Artificer": { name: "Grand Artificer", maxXp: 2.5e7, income: 45000, heroxp: 85 },
+    "Philosopher": { name: "Philosopher", maxXp: 5e8, income: 220000, heroxp: 96 },
+
+    // Celestial Order (Late-Game: paralelo entre Arcane e Void)
+    "Acolyte": { name: "Acolyte", maxXp: 1e9, income: 300000, heroxp: 95 },
+    "Cleric": { name: "Cleric", maxXp: 5e10, income: 2500000, heroxp: 100 },
+    "Inquisitor": { name: "Inquisitor", maxXp: 1e12, income: 1.5e7, heroxp: 115 },
+    "Archangel": { name: "Archangel", maxXp: 5e13, income: 9e7, heroxp: 130 },
+    "Seraph": { name: "Seraph", maxXp: 2e15, income: 5e8, heroxp: 180 },
+    "Astral Sovereign": { name: "Astral Sovereign", maxXp: 5e16, income: 3e9, heroxp: 240 },
+
+    // Technomancy (Endgame: ponte entre Galactic Council e Metaverse Guards)
+    "Scrap Tinkerer": { name: "Scrap Tinkerer", maxXp: 1e28, income: 1e18, heroxp: 300 },
+    "Clockwork Engineer": { name: "Clockwork Engineer", maxXp: 1e31, income: 1e24, heroxp: 420 },
+    "Aether Mechanic": { name: "Aether Mechanic", maxXp: 1e35, income: 1e32, heroxp: 580 },
+    "Cyber-Mage": { name: "Cyber-Mage", maxXp: 1e40, income: 1e40, heroxp: 750 },
+    "Singularity Architect": { name: "Singularity Architect", maxXp: 1e46, income: 1e48, heroxp: 920 },
 }
 
 
@@ -589,6 +620,10 @@ const requirementsBaseData = {
     "Dark Milestones": new EssenceRequirement([toId(".Dark Milestones")], [{ requirement: 5e10 }]),
     "Metaverse Milestones": new EssenceRequirement([toId(".Metaverse Milestones")], [{ requirement: 1e67 }]),
     "Metaverse Guards": new EssenceRequirement([toId(".Metaverse Guards")], [{ requirement: 1e90 }]),
+    "Underworld": new TaskRequirement([toId(".Underworld")], [{ task: "Beggar", requirement: 15 }, { task: "Concentration", requirement: 10 }]),
+    "Alchemy & Artificing": new TaskRequirement([toId(".Alchemy & Artificing")], [{ task: "Blacksmith", requirement: 15 }, { task: "Concentration", requirement: 50 }]),
+    "Celestial Order": new TaskRequirement([toId(".Celestial Order")], [{ task: "Master Wizard", requirement: 10 }, { task: "Meditation", requirement: 500 }]),
+    "Technomancy": new EssenceRequirement([toId(".Technomancy")], [{ requirement: 1e45 }]),
 
     // Rebirth items
     "Rebirth tab": new AgeRequirement(["#rebirthTabButton"], [{ requirement: 25 }]),
@@ -835,16 +870,52 @@ const requirementsBaseData = {
     "Evil perk essence SideBar": new EssenceRequirement(["#evilperkSideBar5"], [{ requirement: 150000000 }]),
 
     "Congratulations": new EssenceRequirement(["#Congratulations"], [{ requirement: 1e308 }]),
+
+    // Underworld
+    "Pickpocket": new TaskRequirement([getQuerySelector("Pickpocket")], [{ task: "Beggar", requirement: 15 }, { task: "Concentration", requirement: 10 }]),
+    "Smuggler": new TaskRequirement([getQuerySelector("Smuggler")], [{ task: "Bargaining", requirement: 15 }, { task: "Pickpocket", requirement: 10 }]),
+    "Spy": new TaskRequirement([getQuerySelector("Spy")], [{ task: "Concentration", requirement: 40 }, { task: "Smuggler", requirement: 10 }]),
+    "Assassin": new TaskRequirement([getQuerySelector("Assassin")], [{ task: "Strength", requirement: 80 }, { task: "Spy", requirement: 10 }]),
+    "Syndicate Boss": new TaskRequirement([getQuerySelector("Syndicate Boss")], [{ task: "Bargaining", requirement: 150 }, { task: "Assassin", requirement: 10 }]),
+    "Shadow King": new TaskRequirement([getQuerySelector("Shadow King")], [{ task: "Dark Influence", requirement: 10 }, { task: "Syndicate Boss", requirement: 10 }]),
+
+    // Alchemy & Artificing
+    "Herb Gatherer": new TaskRequirement([getQuerySelector("Herb Gatherer")], [{ task: "Blacksmith", requirement: 15 }, { task: "Concentration", requirement: 50 }]),
+    "Apothecary": new TaskRequirement([getQuerySelector("Apothecary")], [{ task: "Productivity", requirement: 60 }, { task: "Herb Gatherer", requirement: 10 }]),
+    "Alchemist": new TaskRequirement([getQuerySelector("Alchemist")], [{ task: "Concentration", requirement: 150 }, { task: "Apothecary", requirement: 10 }]),
+    "Golem Crafter": new TaskRequirement([getQuerySelector("Golem Crafter")], [{ task: "Mana Control", requirement: 300 }, { task: "Alchemist", requirement: 10 }]),
+    "Grand Artificer": new TaskRequirement([getQuerySelector("Grand Artificer")], [{ task: "Productivity", requirement: 600 }, { task: "Golem Crafter", requirement: 10 }]),
+    "Philosopher": new TaskRequirement([getQuerySelector("Philosopher")], [{ task: "Meditation", requirement: 1000 }, { task: "Grand Artificer", requirement: 10 }]),
+
+    // Celestial Order
+    "Acolyte": new TaskRequirement([getQuerySelector("Acolyte")], [{ task: "Master Wizard", requirement: 10 }, { task: "Meditation", requirement: 500 }]),
+    "Cleric": new TaskRequirement([getQuerySelector("Cleric")], [{ task: "Mana Control", requirement: 1100 }, { task: "Acolyte", requirement: 10 }]),
+    "Inquisitor": new TaskRequirement([getQuerySelector("Inquisitor")], [{ task: "Battle Tactics", requirement: 1200 }, { task: "Cleric", requirement: 10 }]),
+    "Archangel": new TaskRequirement([getQuerySelector("Archangel")], [{ task: "Mana Control", requirement: 1600 }, { task: "Inquisitor", requirement: 10 }]),
+    "Seraph": new TaskRequirement([getQuerySelector("Seraph")], [{ task: "Meditation", requirement: 2200 }, { task: "Archangel", requirement: 10 }]),
+    "Astral Sovereign": new TaskRequirement([getQuerySelector("Astral Sovereign")], [{ task: "Mana Control", requirement: 3000 }, { task: "Seraph", requirement: 10 }]),
+
+    // Technomancy
+    "Scrap Tinkerer": new TaskRequirement([getQuerySelector("Scrap Tinkerer")], [{ task: "One Above All", requirement: 50 }]),
+    "Clockwork Engineer": new TaskRequirement([getQuerySelector("Clockwork Engineer")], [{ task: "Scrap Tinkerer", requirement: 25 }]),
+    "Aether Mechanic": new TaskRequirement([getQuerySelector("Aether Mechanic")], [{ task: "Clockwork Engineer", requirement: 25 }]),
+    "Cyber-Mage": new TaskRequirement([getQuerySelector("Cyber-Mage")], [{ task: "Aether Mechanic", requirement: 25 }]),
+    "Singularity Architect": new TaskRequirement([getQuerySelector("Singularity Architect")], [{ task: "Cyber-Mage", requirement: 25 }]),
 }
 
 /** @type {Record<string, string[]>} */
 const jobCategories = {
     "Common work": ["Beggar", "Farmer", "Fisherman", "Miner", "Blacksmith", "Merchant"],
+    "Underworld": ["Pickpocket", "Smuggler", "Spy", "Assassin", "Syndicate Boss", "Shadow King"],
     "Military": ["Squire", "Footman", "Veteran footman", "Centenary", "Knight", "Veteran Knight", "Holy Knight", "Lieutenant General"],
+    "Alchemy & Artificing": ["Herb Gatherer", "Apothecary", "Alchemist", "Golem Crafter", "Grand Artificer", "Philosopher"],
     "The Arcane Association": ["Student", "Apprentice Mage", "Adept Mage", "Master Wizard", "Archmage", "Chronomancer", "Chairman", "Imperator"],
+    "Celestial Order": ["Acolyte", "Cleric", "Inquisitor", "Archangel", "Seraph", "Astral Sovereign"],
     "The Void": ["Corrupted", "Void Slave", "Void Fiend", "Abyss Anomaly", "Void Wraith", "Void Reaver", "Void Lord", "Abyss God"],
     "Galactic Council": ["Eternal Wanderer", "Nova", "Sigma Proioxis", "Acallaris", "One Above All"],
+    "Technomancy": ["Scrap Tinkerer", "Clockwork Engineer", "Aether Mechanic", "Cyber-Mage", "Singularity Architect"],
     "Metaverse Guards": ["Snow Crash", "Player One", "Lost in the dark", "Omega"]
+}
 }
 
 /** @type {Record<string, string[]>} */
@@ -888,6 +959,10 @@ const headerRowColors = {
     "The Arcane Association": "rgb(199, 21, 133)",
     "The Void": "rgb(118, 43, 145)",
     "Void Manipulation": "rgb(118, 43, 145)",
+    "Underworld": "rgb(95, 105, 115)",
+    "Alchemy & Artificing": "rgb(46, 139, 87)",
+    "Celestial Order": "rgb(218, 165, 32)",
+    "Technomancy": "rgb(0, 180, 216)",
 }
 
 const headerRowTextColors = {
