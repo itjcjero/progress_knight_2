@@ -916,7 +916,7 @@ const jobCategories = {
     "Technomancy": ["Scrap Tinkerer", "Clockwork Engineer", "Aether Mechanic", "Cyber-Mage", "Singularity Architect"],
     "Metaverse Guards": ["Snow Crash", "Player One", "Lost in the dark", "Omega"]
 }
-}
+
 
 /** @type {Record<string, string[]>} */
 const skillCategories = {
