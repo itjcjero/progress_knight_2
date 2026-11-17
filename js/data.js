@@ -179,7 +179,11 @@ var gameData = {
         reduce_evil_requirement: 0,
         reduce_the_void_requirement: 0,
         reduce_celestial_requirement: 0,
-        receive_essence: 0
+        receive_essence: 0,
+        dark_velocity: 0,
+        abyssal_wisdom: 0,
+        void_resonance: 0,
+        cosmic_dominance: 0
     },
     evil_perks_keep: false,
     essence: 0,
