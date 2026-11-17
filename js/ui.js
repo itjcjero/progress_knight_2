@@ -543,10 +543,13 @@ function renderRebirth() {
     // 2. Void
     const voidReq = getVoidRequirement()
     const voidText = voidReq === 1000 ? "a millennium" :
-        voidReq > 100 ? `${voidReq / 100} whole centuries` :
-            "1 century"
+        voidReq === 100 ? "1 century" :
+            voidReq % 100 === 0 ? `${voidReq / 100} whole centuries` :
+                `${formatWhole(voidReq)} years`
 
-    const voidWordText = voidReq === 1000 ? "thousand " : `${numberWords[voidReq / 100]} hundred `
+    const voidWordText = voidReq === 1000 ? "thousand " :
+        voidReq % 100 === 0 ? `${numberWords[voidReq / 100]} hundred ` :
+            `${formatWhole(voidReq)} `
 
     safeUpdateText("age3", voidText)
     safeUpdateText("age3a", voidWordText)
@@ -576,6 +579,7 @@ function renderRebirth() {
 }
 
 function renderEvilPerks() {
+    registerCustomEvilPerkTooltips()
     safeUpdateText("eppInfo", (gameData.essence > 0) ? "Evil and buffed by Essence" : "Evil")
     safeUpdateText("evilperksDisplay", format(gameData.evil_perks_points, 3))
     safeUpdateText("evilperksGainDisplay", format(getEvilPerksGeneration() * 365))
@@ -586,14 +590,18 @@ function renderEvilPerks() {
     safeUpdateText("celestialReduceYearsBy", formatWhole(getCelestialReduceYearsBy()))
     safeUpdateText("essenceReward", format(getEssenceReward()))
     safeUpdateText("essenceRewardPercent", format(getEssenceRewardPercent(), 0))
+    safeUpdateText("darkVelocityBonus", format(getDarkVelocityBonus(), 2))
+    safeUpdateText("abyssalWisdomBonus", format(getAbyssalWisdomGain(), 2))
+    safeUpdateText("voidResonanceBonus", format(getVoidResonanceGain(), 2))
+    safeUpdateText("cosmicDominanceBonus", format(getCosmicDominanceGain(), 2))
 
-    for (var i = 1; i <= 5; i++) {
+    for (var i = 1; i <= 9; i++) {
         const perkCost = getEvilPerkCost(i)
         safeUpdateText("evilperkCost" + i, format(perkCost, 3))
         safeUpdateHidden("evilperkCostDiv" + i, perkCost == Infinity)
         safeUpdateHidden("evilperkBuyDiv" + i, perkCost == Infinity)
         const button = elById("evilperk" + i)
-        renderEvilPerkButton(button, i, perkCost)
+        if (button) renderEvilPerkButton(button, i, perkCost)
     }
 }
 
@@ -618,26 +626,29 @@ const sideBarRequirements = [
     () => formatLevel(getEvilRequirement()),
     () => formatLevel(getVoidRequirement()),
     () => formatLevel(getCelestialRequirement()),
-    () => format(getEssenceReward())
+    () => format(getEssenceReward()),
+    () => "x" + format(getDarkVelocityBonus(), 2),
+    () => "x" + format(getAbyssalWisdomGain(), 2),
+    () => "x" + format(getVoidResonanceGain(), 2),
+    () => "x" + format(getCosmicDominanceGain(), 2)
 ];
 
 
 function renderEvilPerksSideBar() {
     safeUpdateText("evilperksDisplaySideBar", format(gameData.evil_perks_points, 1))
 
-    for (var i = 1; i <= 5; i++) {
+    for (var i = 1; i <= 9; i++) {
         safeUpdateText("reqSideBar" + i, sideBarRequirements[i - 1]());
 
-        // Обновляем стоимость и состояние перка
         const perkCost = getEvilPerkCost(i)
-        if ((i < 5) || (gameData.requirements["Evil perk essence SideBar"].completed))
+        if (i !== 5 || gameData.requirements["Evil perk essence SideBar"].completed)
             safeUpdateClass("evilperkSideBar" + i, "hidden", perkCost === Infinity)
 
         if (perkCost !== Infinity) {
             safeUpdateText("evilperkCostSideBar" + i, format(perkCost, 1))
             safeUpdateHidden("evilperkCostDivSideBar" + i, perkCost === Infinity)
             const button = elById("evilperkSideBar" + i)
-            renderEvilPerkButton(button, i, perkCost)
+            if (button) renderEvilPerkButton(button, i, perkCost)
         }
     }
 }
@@ -1272,7 +1283,6 @@ function setTaskAnimations(taskAnimations, needsave = true) {
         saveGameData()
 }
 
-setTaskAnimations
 
 function setEPSidebar(enabled, needsave = true) {
     gameData.settings.EPSidebar = enabled

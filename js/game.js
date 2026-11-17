@@ -4,6 +4,85 @@ function addMultipliers() {
     const skillData = gameData.skillData;
     const itemData = gameData.itemData;
 
+    const baseAllXpTasks = [
+        "Dark Influence",
+        "Demon Training",
+        "Void Influence",
+        "Parallel Universe",
+        "Immortal Ruler",
+        "Blinded By Darkness",
+        "Shadow Whisper",
+        "Hellfire",
+        "Apocalypse",
+        "Void Step",
+        "Singularity",
+        "Gravity Control",
+        "Galactic Harmony",
+        "Omnipotence",
+        "Infinity Spark",
+        "Absolute Authority",
+        "Nightmare",
+        "Darkness Incarnate",
+        "Omega Darkness",
+    ];
+
+    const globalSkillXpTasks = [
+        "Concentration",
+        "Void Symbiosis",
+        "Evil Incarnate",
+        "Dark Prince",
+        "Posture",
+        "Memory Palace",
+        "Divination",
+        "Void Sight",
+        "Void Convergence",
+        "Cosmic Awareness",
+        "Omniscience",
+        "Multiverse Sight",
+        "Dark Herald",
+        "Nether King",
+    ];
+
+    const globalSkillXpItems = [
+        "Book",
+        "Study Desk",
+        "Library",
+        "Void Blade",
+        "Universe Fragment",
+        "Custom Galaxy",
+        "Quill & Ink",
+        "Silver Astrolabe",
+        "Chronometer",
+        "Rift Compass",
+        "Cosmic Pendulum",
+        "Dimensional Key",
+        "Quantum Processor",
+        "Chronos Hourglass",
+        "Multiverse Loom",
+        "Omega Codex",
+    ];
+
+    const globalJobXpTasks = [
+        "Productivity",
+        "Dark Knowledge",
+        "Time Management",
+        "Discipline",
+        "Forbidden Tome",
+    ];
+
+    const globalJobXpItems = [
+        "Personal Squire",
+        "Lantern",
+        "Philosopher's Stone",
+        "Aether Engine",
+    ];
+
+    const globalJobPayTasks = [
+        "Demon's Wealth",
+        "Demonic Pact",
+        "Dark Sovereign",
+    ];
+
     for (const taskName in taskData) {
         const task = taskData[taskName];
 
@@ -16,20 +95,13 @@ function addMultipliers() {
             getHappiness,
             getDarkMatterXpGain,
             getDarkMatterSkillXP,
-            getTimeIsAFlatCircleXP
+            getTimeIsAFlatCircleXP,
+            getAbyssalWisdomGain
         );
 
-        // Baseline task pointers
-        const baseTasks = [
-            "Dark Influence",
-            "Demon Training",
-            "Void Influence",
-            "Parallel Universe",
-            "Immortal Ruler",
-            "Blinded By Darkness",
-        ];
-        for (let i = 0; i < baseTasks.length; i++) {
-            const t = skillData[baseTasks[i]];
+        // Baseline task pointers (All XP)
+        for (let i = 0; i < baseAllXpTasks.length; i++) {
+            const t = skillData[baseAllXpTasks[i]];
             if (t) xpTasks.push(t);
         }
 
@@ -38,69 +110,205 @@ function addMultipliers() {
             const incFuncs = task.incomeFuncs;
             const incTasks = task.incomeTasks;
 
-            incTasks.push(skillData["Demon's Wealth"]);
             incFuncs.push(getLifeCoachIncomeGain);
-
-            xpTasks.push(skillData["Productivity"]);
-            xpTasks.push(skillData["Dark Knowledge"]);
-            xpItems.push(itemData["Personal Squire"]);
-        } else if (task instanceof Skill) {
-            xpTasks.push(skillData["Concentration"]);
-
-            const skillItems = [
-                "Book",
-                "Study Desk",
-                "Library",
-                "Void Blade",
-                "Universe Fragment",
-                "Custom Galaxy",
-            ];
-            for (let i = 0; i < skillItems.length; i++) {
-                const it = itemData[skillItems[i]];
-                if (it) xpItems.push(it);
+            for (let i = 0; i < globalJobPayTasks.length; i++) {
+                const t = skillData[globalJobPayTasks[i]];
+                if (t) incTasks.push(t);
             }
 
-            xpTasks.push(skillData["Void Symbiosis"]);
-            xpTasks.push(skillData["Evil Incarnate"]);
-            xpTasks.push(skillData["Dark Prince"]);
+            for (let i = 0; i < globalJobXpTasks.length; i++) {
+                const t = skillData[globalJobXpTasks[i]];
+                if (t) xpTasks.push(t);
+            }
+
+            for (let i = 0; i < globalJobXpItems.length; i++) {
+                const it = itemData[globalJobXpItems[i]];
+                if (it) xpItems.push(it);
+            }
+        } else if (task instanceof Skill) {
+            for (let i = 0; i < globalSkillXpTasks.length; i++) {
+                const t = skillData[globalSkillXpTasks[i]];
+                if (t) xpTasks.push(t);
+            }
+
+            for (let i = 0; i < globalSkillXpItems.length; i++) {
+                const it = itemData[globalSkillXpItems[i]];
+                if (it) xpItems.push(it);
+            }
         }
 
         if (jobCategories["Military"].includes(task.name)) {
-            jobData[task.name].incomeTasks.push(skillData["Strength"]);
-            xpTasks.push(skillData["Battle Tactics"]);
-            xpItems.push(itemData["Steel Longsword"]);
+            jobData[task.name].incomeTasks.push(
+                skillData["Strength"],
+                skillData["Shield Defense"],
+                skillData["Formation"],
+                skillData["Iron Body"],
+                skillData["Warlord Aura"]
+            );
+            xpTasks.push(
+                skillData["Battle Tactics"],
+                skillData["Swordsmanship"],
+                skillData["Weapon Mastery"],
+                skillData["War Strategy"]
+            );
+            xpItems.push(
+                itemData["Steel Longsword"],
+                itemData["Iron Shield"],
+                itemData["War Banner"]
+            );
         } else if (task.name === "Strength") {
-            xpTasks.push(skillData["Muscle Memory"]);
-            xpItems.push(itemData["Dumbbells"]);
+            xpTasks.push(
+                skillData["Muscle Memory"],
+                skillData["Endurance"],
+                skillData["Conditioning"]
+            );
+            xpItems.push(
+                itemData["Dumbbells"],
+                itemData["Whetstone"]
+            );
+        } else if (skillCategories["Combat"].includes(task.name)) {
+            xpTasks.push(
+                skillData["Footwork"],
+                skillData["Parry"],
+                skillData["Battle Instinct"]
+            );
         } else if (skillCategories["Magic"].includes(task.name)) {
-            xpItems.push(itemData["Sapphire Charm"]);
-            xpItems.push(itemData["Observatory"]);
-            xpTasks.push(skillData["Universal Ruler"]);
+            xpItems.push(
+                itemData["Sapphire Charm"],
+                itemData["Observatory"],
+                itemData["Alchemy Kit"],
+                itemData["Enchanted Quill"],
+                itemData["Arcane Focus"],
+                itemData["Crystal Ball"]
+            );
+            xpTasks.push(
+                skillData["Universal Ruler"],
+                skillData["Arcane Flow"],
+                skillData["Mana Fountain"],
+                skillData["Reality Bending"],
+                skillData["Eclipse"],
+                skillData["Eternal Night"]
+            );
             xpFuncs.push(getTaaAndMagicXpGain);
         } else if (skillCategories["Void Manipulation"].includes(task.name)) {
-            xpItems.push(itemData["Void Necklace"]);
-            xpItems.push(itemData["Void Orb"]);
+            xpItems.push(
+                itemData["Void Necklace"],
+                itemData["Void Orb"],
+                itemData["Abyssal Tome"],
+                itemData["Void Crystal"]
+            );
         } else if (jobCategories["The Arcane Association"].includes(task.name)) {
-            xpTasks.push(skillData["Mana Control"]);
+            xpTasks.push(
+                skillData["Mana Control"],
+                skillData["Spellcasting"],
+                skillData["Enchantment"]
+            );
             xpFuncs.push(getTaaAndMagicXpGain);
 
             const arcaneJob = jobData[task.name];
             if (arcaneJob) {
-                arcaneJob.incomeTasks.push(skillData["All Seeing Eye"]);
+                arcaneJob.incomeTasks.push(
+                    skillData["All Seeing Eye"],
+                    skillData["Runic Lore"],
+                    skillData["Telekinesis"],
+                    skillData["Archmage Will"]
+                );
             }
+        } else if (jobCategories["Underworld"].includes(task.name)) {
+            xpTasks.push(
+                skillData["Focus"],
+                skillData["Memory Palace"],
+                skillData["Shadow Whisper"]
+            );
+            xpItems.push(itemData["Shadow Cloak"]);
+            const underworldJob = jobData[task.name];
+            if (underworldJob) {
+                underworldJob.incomeTasks.push(
+                    skillData["Bargaining"],
+                    skillData["Haggling"]
+                );
+            }
+        } else if (jobCategories["Alchemy & Artificing"].includes(task.name)) {
+            xpTasks.push(
+                skillData["Alchemy Mastery"],
+                skillData["Divination"],
+                skillData["Mana Control"]
+            );
+            xpItems.push(
+                itemData["Alchemy Kit"],
+                itemData["Philosopher's Stone"],
+                itemData["Enchanted Quill"]
+            );
+        } else if (jobCategories["Celestial Order"].includes(task.name)) {
+            xpTasks.push(
+                skillData["Mana Control"],
+                skillData["Spellcasting"],
+                skillData["Enchantment"],
+                skillData["Starlight"],
+                skillData["Astral Harmony"],
+                skillData["Cosmic Awareness"]
+            );
+            xpItems.push(
+                itemData["Celestial Robe"],
+                itemData["Star Map"],
+                itemData["Seraphic Halo"]
+            );
+            xpFuncs.push(getTaaAndMagicXpGain);
+        } else if (jobCategories["Technomancy"].includes(task.name)) {
+            xpTasks.push(
+                skillData["Chrono Sense"],
+                skillData["Temporal Dimension"],
+                skillData["Reality Bending"],
+                skillData["Singularity"],
+                skillData["Reality Weaver"]
+            );
+            xpItems.push(
+                itemData["Quantum Processor"],
+                itemData["Aether Engine"],
+                itemData["Chronos Hourglass"],
+                itemData["Reality Compiler"]
+            );
+            xpFuncs.push(getEssenceXpGain);
         } else if (jobCategories["The Void"].includes(task.name)) {
-            xpTasks.push(skillData["Void Amplification"]);
-            xpItems.push(itemData["Void Armor"]);
-            xpItems.push(itemData["Void Dust"]);
+            xpTasks.push(
+                skillData["Void Amplification"],
+                skillData["Entropy Touch"],
+                skillData["Oblivion Gaze"],
+                skillData["Abyssal Ascension"]
+            );
+            xpItems.push(
+                itemData["Void Armor"],
+                itemData["Void Dust"],
+                itemData["Void Gauntlets"],
+                itemData["Null Crown"]
+            );
         } else if (jobCategories["Galactic Council"].includes(task.name)) {
-            xpItems.push(itemData["Celestial Robe"]);
-            xpTasks.push(skillData["Epiphany"]);
+            xpItems.push(
+                itemData["Celestial Robe"],
+                itemData["Star Map"],
+                itemData["Nebula Core"],
+                itemData["Galactic Scepter"]
+            );
+            xpTasks.push(
+                skillData["Epiphany"],
+                skillData["Nebula Weaving"],
+                skillData["Quasar Pulse"],
+                skillData["Transcendence"]
+            );
         } else if (skillCategories["Dark Magic"].includes(task.name)) {
+            xpTasks.push(skillData["Corruption"]);
             xpFuncs.push(getEvilXpGain);
         } else if (skillCategories["Almightiness"].includes(task.name)) {
             xpFuncs.push(getEssenceXpGain);
         } else if (skillCategories["Fundamentals"].includes(task.name)) {
-            xpItems.push(itemData["Mind's Eye"]);
+            xpTasks.push(
+                skillData["Focus"],
+                skillData["Speed Reading"]
+            );
+            xpItems.push(
+                itemData["Mind's Eye"],
+                itemData["Merchant Ledger"]
+            );
         } else if (skillCategories["Darkness"].includes(task.name)) {
             xpFuncs.push(getDarknessXpGain);
         }
@@ -121,11 +329,11 @@ function addMultipliers() {
             "Brainwashing",
             "Abyss Manipulation",
             "Galactic Command",
-            "Bookkeeping", 
-            "Haggling", 
-            "Frugality", 
-            "Fear Aura", 
-            "Null Dominion", 
+            "Bookkeeping",
+            "Haggling",
+            "Frugality",
+            "Fear Aura",
+            "Null Dominion",
             "Celestial Decree"
         ];
         for (let i = 0; i < expenseNames.length; i++) {
@@ -301,7 +509,8 @@ function setCustomEffects() {
                 if (gameData.taskData[taskName].isHero)
                     countHeroes++
             }
-            mult += countHeroes * 6 / 74
+            const totalTasks = Object.keys(gameData.taskData).length || 192
+            mult += countHeroes * 6 / totalTasks
         }
 
         return mult
@@ -323,13 +532,27 @@ function getHappiness() {
 
     const meditationEffect = getBindedSkillEffect("Meditation")
     const mindreleaseEffect = getBindedSkillEffect("Mind Release")
+    const deepBreathing = getBindedSkillEffect("Deep Breathing")
+    const mindfulness = getBindedSkillEffect("Mindfulness")
+    const serenity = getBindedSkillEffect("Serenity")
+    const darkRift = getBindedSkillEffect("Dark Rift")
+    const astralHarmony = getBindedSkillEffect("Astral Harmony")
+
     const butlerEffect = getBindedItemEffect("Butler")
     const multiverseFragment = getBindedItemEffect("Multiverse Fragment")
-    const godsBlessings = gameData.requirements["God's Blessings"].completed ? 10000000 : 1
     const stairWayToHeaven = getBindedItemEffect("Stairway to heaven")
+    const fineWine = getBindedItemEffect("Fine Wine")
+    const royalFeast = getBindedItemEffect("Royal Feast")
+    const astralCrown = getBindedItemEffect("Astral Crown")
+    const realityAnchor = getBindedItemEffect("Reality Anchor")
+    const seraphicHalo = getBindedItemEffect("Seraphic Halo")
+
+    const godsBlessings = gameData.requirements["God's Blessings"].completed ? 10000000 : 1
     const propertyEffect = gameData.currentProperty?.getEffect() ?? 1
     const happiness = godsBlessings * meditationEffect() * butlerEffect() * mindreleaseEffect()
-        * multiverseFragment() * propertyEffect * getChallengeBonus("an_unhappy_life") * stairWayToHeaven()
+        * deepBreathing() * mindfulness() * serenity() * darkRift() * astralHarmony()
+        * multiverseFragment() * propertyEffect * getChallengeBonus("an_unhappy_life")
+        * stairWayToHeaven() * fineWine() * royalFeast() * astralCrown() * realityAnchor() * seraphicHalo()
 
     if (gameData.active_challenge == "dance_with_the_devil") return pow(happiness, 0.075)
     if (gameData.active_challenge == "an_unhappy_life") return pow(happiness, 0.5)
@@ -389,17 +612,32 @@ function getEvilGain() {
     const absoluteWish = gameData.skillData["Absolute Wish"]
     const oblivionEmbodiment = gameData.skillData["Void Embodiment"]
     const yingYang = gameData.skillData["Yin Yang"]
+    const cursedPact = gameData.skillData["Cursed Pact"]
+    const soulHarvest = gameData.skillData["Soul Harvest"]
+    const abyssalChant = gameData.skillData["Abyssal Chant"]
+    const netherRitual = gameData.skillData["Nether Ritual"]
+    const destruction = gameData.skillData["Destruction"]
+    const balance = gameData.skillData["Balance"]
+
     const inferno = gameData.requirements["Inferno"].completed ? 5 : 1
     const theDevilInsideYou = gameData.requirements["The Devil inside you"].completed ? 1e15 : 1
     const stairWayToHell = getBindedItemEffect("Highway to hell")
+    const shadowCloak = getBindedItemEffect("Shadow Cloak")
+    const abyssHeart = getBindedItemEffect("Abyss Heart")
+    const infernalThrone = getBindedItemEffect("Infernal Throne")
     const evilBooster = (gameData.perks.evil_booster) ? 1e50 : 1
 
     const event_id = getCurrentEventId()
     const eventEvil = (event_id == 4) ? eventsData[event_id].mult : 1
 
     return evilControl.getEffect() * bloodMeditation.getEffect() * absoluteWish.getEffect()
-        * oblivionEmbodiment.getEffect() * yingYang.getEffect() * inferno * getChallengeBonus("legends_never_die")
-        * getDarkMatterSkillEvil() * theDevilInsideYou * stairWayToHell() * evilBooster * eventEvil
+        * oblivionEmbodiment.getEffect() * yingYang.getEffect()
+        * cursedPact.getEffect() * soulHarvest.getEffect() * abyssalChant.getEffect()
+        * netherRitual.getEffect() * destruction.getEffect() * balance.getEffect()
+        * inferno * getChallengeBonus("legends_never_die")
+        * getDarkMatterSkillEvil() * theDevilInsideYou
+        * stairWayToHell() * shadowCloak() * abyssHeart() * infernalThrone()
+        * evilBooster * eventEvil * getVoidResonanceGain()
 }
 
 function getEvilGainAvailable() {
@@ -415,6 +653,20 @@ function getEssenceGain() {
     const faintHope = milestoneData["Faint Hope"]
     const rise = milestoneData["Rise of Great Heroes"]
     const darkMagician = gameData.skillData["Dark Magician"]
+    const solarFlare = gameData.skillData["Solar Flare"]
+    const supernova = gameData.skillData["Supernova"]
+    const starforging = gameData.skillData["Starforging"]
+    const universalLaw = gameData.skillData["Universal Law"]
+    const creation = gameData.skillData["Creation"]
+    const balance = gameData.skillData["Balance"]
+    const realityWeaver = gameData.skillData["Reality Weaver"]
+    const abyssalSovereign = gameData.skillData["Abyssal Sovereign"]
+    const cosmicShadow = gameData.skillData["Cosmic Shadow"]
+
+    const infinityPrism = getBindedItemEffect("Infinity Prism")
+    const essenceCondenser = getBindedItemEffect("Essence Condenser")
+    const astralCrucible = getBindedItemEffect("Astral Crucible")
+    const genesisSeed = getBindedItemEffect("Genesis Seed")
 
     const lifeIsValueable = gameData.requirements["Life is valueable"].completed ? gameData.dark_matter : 1
 
@@ -425,8 +677,13 @@ function getEssenceGain() {
 
     return essenceControl.getEffect() * essenceCollector.getEffect() * transcendentMaster.getEffect()
         * faintHope.getEffect() * rise.getEffect() * getChallengeBonus("dance_with_the_devil")
-        * getAGiftFromGodEssenceGain() * darkMagician.getEffect() * getDarkMatterSkillEssence()
-        * lifeIsValueable * essenceMultGain() * eventEssence + infernoFlatBonus
+        * getAGiftFromGodEssenceGain() * darkMagician.getEffect()
+        * solarFlare.getEffect() * supernova.getEffect() * starforging.getEffect() * universalLaw.getEffect()
+        * creation.getEffect() * balance.getEffect() * realityWeaver.getEffect()
+        * abyssalSovereign.getEffect() * cosmicShadow.getEffect()
+        * infinityPrism() * essenceCondenser() * astralCrucible() * genesisSeed()
+        * getDarkMatterSkillEssence() * lifeIsValueable * essenceMultGain()
+        * eventEssence * getVoidResonanceGain() + infernoFlatBonus
 }
 
 function getEssenceGainAvailable() {
@@ -437,10 +694,20 @@ function getEssenceGainAvailable() {
 
 function getDarkMatterGain() {
     const darkRuler = gameData.skillData["Dark Ruler"]
+    const shadowLord = gameData.skillData["Shadow Lord"]
+    const voidEmperor = gameData.skillData["Void Emperor"]
+    const blackHole = gameData.skillData["Black Hole"]
+
     const darkMatterHarvester = gameData.requirements["Dark Matter Harvester"].completed ? 10 : 1
     const darkMatterMining = gameData.requirements["Dark Matter Mining"].completed ? 3 : 1
     const darkMatterMillionaire = gameData.requirements["Dark Matter Millionaire"].completed ? 500 : 1
+
     const Desintegration = gameData.itemData['Desintegration'].getEffect()
+    const darkMatterReactor = gameData.itemData['Dark Matter Reactor'].getEffect()
+    const singularityEngine = gameData.itemData['Singularity Engine'].getEffect()
+    const voidSingularity = gameData.itemData['Void Singularity'].getEffect()
+    const realityCompiler = gameData.itemData['Reality Compiler'].getEffect()
+
     const TheEndIsNear = getUnspentPerksDarkmatterGainBuff()
 
     const metaverseBuff = gameData.rebirthFiveCount > 0 ? pow(1.7, min(gameData.rebirthFiveCount, 10)) : 1
@@ -448,8 +715,15 @@ function getDarkMatterGain() {
     const event_id = getCurrentEventId()
     const eventDarkMatter = (event_id == 6) ? eventsData[event_id].mult : 1
 
-    return 1 + 1 * darkRuler.getEffect() * darkMatterHarvester * darkMatterMining * darkMatterMillionaire * getChallengeBonus("the_darkest_time") * getDarkMatterSkillDarkMater() * darkMatterMultGain() *
-        (Desintegration == 0 ? 1 : Desintegration) * TheEndIsNear * eventDarkMatter * metaverseBuff
+    return 1 + 1 * darkRuler.getEffect() * shadowLord.getEffect() * voidEmperor.getEffect() * blackHole.getEffect()
+        * darkMatterHarvester * darkMatterMining * darkMatterMillionaire
+        * getChallengeBonus("the_darkest_time") * getDarkMatterSkillDarkMater() * darkMatterMultGain()
+        * (Desintegration == 0 ? 1 : Desintegration)
+        * (darkMatterReactor == 0 ? 1 : darkMatterReactor)
+        * (singularityEngine == 0 ? 1 : singularityEngine)
+        * (voidSingularity == 0 ? 1 : voidSingularity)
+        * (realityCompiler == 0 ? 1 : realityCompiler)
+        * TheEndIsNear * eventDarkMatter * metaverseBuff * getCosmicDominanceGain()
 }
 
 function getDarkMatterGainAvailable() {
@@ -491,6 +765,8 @@ function getUnpausedGameSpeed() {
     const timeWarping = gameData.skillData["Time Warping"]
     const temporalDimension = gameData.skillData["Temporal Dimension"]
     const timeLoop = gameData.skillData["Time Loop"]
+    const chronoSense = gameData.skillData["Chrono Sense"]
+    const riftWalking = gameData.skillData["Rift Walking"]
     const warpDrive = (gameData.requirements["Eternal Time"].completed) ? 2 : 1
     const speedSpeedSpeed = gameData.requirements["Speed speed speed"].completed ? 1000 : 1
     const timeIsAFlatCircle = gameData.requirements["Time is a flat circle"].completed ? 1000 : 1
@@ -498,7 +774,8 @@ function getUnpausedGameSpeed() {
     const event_id = getCurrentEventId()
     const eventWarping = (event_id == 1) ? eventsData[event_id].mult : 1
 
-    const timeWarpingSpeed = eppEffect * boostWarping * timeWarping.getEffect() * temporalDimension.getEffect() * timeLoop.getEffect() * warpDrive * speedSpeedSpeed * timeIsAFlatCircle
+    const timeWarpingSpeed = eppEffect * boostWarping * timeWarping.getEffect() * temporalDimension.getEffect() * timeLoop.getEffect()
+        * chronoSense.getEffect() * riftWalking.getEffect() * warpDrive * speedSpeedSpeed * timeIsAFlatCircle * getCosmicDominanceGain()
 
     const gameSpeed = baseGameSpeed * timeWarpingSpeed * getChallengeBonus("time_does_not_fly") * getGottaBeFastGain() * getDarkMatterSkillTimeWarping() * eventWarping
 
@@ -757,6 +1034,10 @@ function resetEvilPerks() {
 
         gameData.evil_perks.reduce_the_void_requirement = 0
         gameData.evil_perks.reduce_celestial_requirement = 0
+        gameData.evil_perks.dark_velocity = 0
+        gameData.evil_perks.abyssal_wisdom = 0
+        gameData.evil_perks.void_resonance = 0
+        gameData.evil_perks.cosmic_dominance = 0
     }
 }
 
@@ -779,6 +1060,10 @@ function resetEvilPerksByHalf() {
 
         gameData.evil_perks.reduce_the_void_requirement = floor(gameData.evil_perks.reduce_the_void_requirement / 2)
         gameData.evil_perks.reduce_celestial_requirement = floor(gameData.evil_perks.reduce_celestial_requirement / 2)
+        gameData.evil_perks.dark_velocity = floor((gameData.evil_perks.dark_velocity || 0) / 2)
+        gameData.evil_perks.abyssal_wisdom = floor((gameData.evil_perks.abyssal_wisdom || 0) / 2)
+        gameData.evil_perks.void_resonance = floor((gameData.evil_perks.void_resonance || 0) / 2)
+        gameData.evil_perks.cosmic_dominance = floor((gameData.evil_perks.cosmic_dominance || 0) / 2)
     }
 }
 
@@ -1047,10 +1332,18 @@ function getLifespan() {
     const higherDimensions = gameData.skillData["Higher Dimensions"]
     const abyss = gameData.skillData["Ceaseless Abyss"]
     const cosmicLongevity = gameData.skillData["Cosmic Longevity"]
+    const astralProjection = gameData.skillData["Astral Projection"]
+    const nullBarrier = gameData.skillData["Null Barrier"]
+    const starlight = gameData.skillData["Starlight"]
+    const omnipresence = gameData.skillData["Omnipresence"]
+    const eternalFlame = gameData.skillData["Eternal Flame"]
     const speedSpeedSpeed = gameData.requirements["Speed speed speed"].completed ? 1000 : 1
     const lifeIsValueable = gameData.requirements["Life is valueable"].completed ? 1e5 : 1
     let lifespan = baseLifespan * immortality.getEffect() * superImmortality.getEffect() * abyss.getEffect()
-        * cosmicLongevity.getEffect() * higherDimensions.getEffect() * lifeIsValueable * speedSpeedSpeed
+        * cosmicLongevity.getEffect() * higherDimensions.getEffect()
+        * astralProjection.getEffect() * nullBarrier.getEffect() * starlight.getEffect()
+        * omnipresence.getEffect() * eternalFlame.getEffect()
+        * lifeIsValueable * speedSpeedSpeed
 
     if (gameData.active_challenge == "legends_never_die" || gameData.active_challenge == "the_darkest_time")
         lifespan = pow(lifespan, 0.72) + 365 * 25

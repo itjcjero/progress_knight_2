@@ -1371,6 +1371,10 @@ const headerRowTextColors = {
     "Dark Milestones": "purple",
     "Metaverse Milestones": "purple",
     "Metaverse Guards": "purple",
+    "Underworld": "white",
+    "Alchemy & Artificing": "white",
+    "Celestial Order": "purple",
+    "Technomancy": "darkblue",
 }
 
 
