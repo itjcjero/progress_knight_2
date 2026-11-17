@@ -40,6 +40,10 @@ function initEvilPerkCostsCache() {
 				: pow(6.66, lvl + 1) - 666 * 33 - 5e6
 		},
 		5: { max: 309, calc: (lvl) => pow(10, lvl) * 6.66e10 } // Для 5 кейса предел ~308-309 по условию 1e308
+		6: { max: 5, calc: (lvl) => pow(10, lvl + 1) * 1e15 },   // Reduz o custo de reset / penalidades leves
+		7: { max: 10, calc: (lvl) => pow(8, lvl + 1) * 1e25 },   // Bônus moderado de XP em Void
+		8: { max: 10, calc: (lvl) => pow(15, lvl + 1) * 1e40 },  // Multiplicador de Dark Matter balanceado
+		9: { max: 5, calc: (lvl) => pow(50, lvl + 1) * 1e70 }    // Endgame absoluto: Multiplicador fracionado de Essence
 	};
 
 	for (const num in config) {
@@ -73,7 +77,14 @@ function getEvilPerksGeneration() {
 		essence_perk_buff_mult *= gameData.essence
 	else
 		essence_perk_buff_mult = 1e308
-	return log10(gameData.evil + 1) * log10(essence_perk_buff_mult) / 365
+
+	// Bônus multiplicativo opcional dos novos perks de endgame (Dark Velocity - Rank 6)
+	let darkVelocityBonus = 1;
+	if (gameData.evil_perks && gameData.evil_perks.dark_velocity) {
+		darkVelocityBonus += gameData.evil_perks.dark_velocity * 0.05; // +5% de ganho de EPP por rank
+	}
+
+	return log10(gameData.evil + 1) * log10(essence_perk_buff_mult) / 365 * darkVelocityBonus;
 }
 
 /**
@@ -195,6 +206,10 @@ function getEvilPerkRank(i) {
 			return gameData.evil_perks.reduce_celestial_requirement
 		case 5:
 			return gameData.evil_perks.receive_essence
+		case 6: return gameData.evil_perks.dark_velocity || 0;
+		case 7: return gameData.evil_perks.abyssal_wisdom || 0;
+		case 8: return gameData.evil_perks.void_resonance || 0;
+		case 9: return gameData.evil_perks.cosmic_dominance || 0;
 	}
 }
 
@@ -234,6 +249,31 @@ function buyEvilPerk(evilperknum) {
 				gameData.essence += getEssenceReward()
 			}
 			break
+		case 6:
+			if (gameData.evil_perks_points >= getEvilPerkCost(6)) {
+				gameData.evil_perks_points -= getEvilPerkCost(6)
+				gameData.evil_perks.dark_velocity = (gameData.evil_perks.dark_velocity || 0) + 1
+			}
+			break
+		case 7:
+			if (gameData.evil_perks_points >= getEvilPerkCost(7)) {
+				gameData.evil_perks_points -= getEvilPerkCost(7)
+				gameData.evil_perks.abyssal_wisdom = (gameData.evil_perks.abyssal_wisdom || 0) + 1
+			}
+			break
+		case 8:
+			if (gameData.evil_perks_points >= getEvilPerkCost(8)) {
+				gameData.evil_perks_points -= getEvilPerkCost(8)
+				gameData.evil_perks.void_resonance = (gameData.evil_perks.void_resonance || 0) + 1
+			}
+			break
+		case 9:
+			if (gameData.evil_perks_points >= getEvilperkCost(9) rescue if needed...) { ... }
+			if (gameData.evil_perks_points >= getEvilPerkCost(9)) {
+				gameData.evil_perks_points -= getEvilPerkCost(9)
+				gameData.evil_perks.cosmic_dominance = (gameData.evil_perks.cosmic_dominance || 0) + 1
+			}
+			break
 	}
 }
 
@@ -247,6 +287,10 @@ function hasEvilPerk(i) {
 		case 3: return gameData.evil_perks.reduce_the_void_requirement > 0
 		case 4: return gameData.evil_perks.reduce_celestial_requirement > 0
 		case 5: return gameData.evil_perks.receive_essence > 0
+		case 6: return (gameData.evil_perks.dark_velocity || 0) > 0;
+		case 7: return (gameData.evil_perks.abyssal_wisdom || 0) > 0;
+		case 8: return (gameData.evil_perks.void_resonance || 0) > 0;
+		case 9: return (gameData.evil_perks.cosmic_dominance || 0) > 0;
 	}
 	return false
 }
