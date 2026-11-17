@@ -9,7 +9,6 @@
  * The configuration object mapping perk IDs to their respective formulas.
  * @typedef {Record<number, EvilPerkConfigElement>} EvilPerkConfig
  */
-
 /** 
  * Global object acting as a pre-calculated cost cache for each perk ID.
  * Contains arrays where the index equals the perk level, and the value is the cost.
@@ -70,22 +69,22 @@ function initEvilPerkCostsCache() {
 	}
 }
 
-initEvilPerkCostsCache();
+initEvilPerkCostsCache()
+
 
 function getEvilPerksGeneration() {
-	if (gameData.evil == 0) return 0;
-	let essence_perk_buff_mult = 1e9;
+	if (gameData.evil == 0) return 0
+	let essence_perk_buff_mult = 1e9
 	if (gameData.essence == 0)
-		essence_perk_buff_mult = 10;
+		essence_perk_buff_mult = 10
 	else if (gameData.essence < 1e308 / essence_perk_buff_mult)
-		essence_perk_buff_mult *= gameData.essence;
+		essence_perk_buff_mult *= gameData.essence
 	else
-		essence_perk_buff_mult = 1e308;
+		essence_perk_buff_mult = 1e308
 
-	// Bônus multiplicativo opcional dos novos perks de endgame (Dark Velocity - Rank 6)
 	let darkVelocityBonus = 1;
 	if (gameData.evil_perks && gameData.evil_perks.dark_velocity) {
-		darkVelocityBonus += gameData.evil_perks.dark_velocity * 0.05; // +5% de ganho de EPP por rank
+		darkVelocityBonus += gameData.evil_perks.dark_velocity * 0.05;
 	}
 
 	return log10(gameData.evil + 1) * log10(essence_perk_buff_mult) / 365 * darkVelocityBonus;
@@ -181,17 +180,21 @@ function getEssenceRewardPercent() {
 function getEvilPerkCost(evilperknum) {
 	const currentLevels = [
 		0,
-		gameData.evil_perks.reduce_eye_requirement,
-		gameData.evil_perks.reduce_evil_requirement,
-		gameData.evil_perks.reduce_the_void_requirement,
-		gameData.evil_perks.reduce_celestial_requirement,
-		gameData.evil_perks.receive_essence
+		gameData.evil_perks.reduce_eye_requirement || 0,
+		gameData.evil_perks.reduce_evil_requirement || 0,
+		gameData.evil_perks.reduce_the_void_requirement || 0,
+		gameData.evil_perks.reduce_celestial_requirement || 0,
+		gameData.evil_perks.receive_essence || 0,
+		gameData.evil_perks.dark_velocity || 0,
+		gameData.evil_perks.abyssal_wisdom || 0,
+		gameData.evil_perks.void_resonance || 0,
+		gameData.evil_perks.cosmic_dominance || 0
 	];
 
-	const lvl = currentLevels[evilperknum];
+	const lvl = currentLevels[evilperknum] || 0;
 	const perkCache = evilPerkCostsCache[evilperknum];
 
-	return perkCache[lvl]
+	return perkCache ? perkCache[lvl] : Infinity;
 }
 
 
@@ -200,83 +203,64 @@ function getEvilPerkCost(evilperknum) {
  */
 function getEvilPerkRank(i) {
 	switch (i) {
-		case 1:
-			return gameData.evil_perks.reduce_eye_requirement
-		case 2:
-			return gameData.evil_perks.reduce_evil_requirement
-		case 3:
-			return gameData.evil_perks.reduce_the_void_requirement
-		case 4:
-			return gameData.evil_perks.reduce_celestial_requirement
-		case 5:
-			return gameData.evil_perks.receive_essence
+		case 1: return gameData.evil_perks.reduce_eye_requirement || 0;
+		case 2: return gameData.evil_perks.reduce_evil_requirement || 0;
+		case 3: return gameData.evil_perks.reduce_the_void_requirement || 0;
+		case 4: return gameData.evil_perks.reduce_celestial_requirement || 0;
+		case 5: return gameData.evil_perks.receive_essence || 0;
 		case 6: return gameData.evil_perks.dark_velocity || 0;
 		case 7: return gameData.evil_perks.abyssal_wisdom || 0;
 		case 8: return gameData.evil_perks.void_resonance || 0;
 		case 9: return gameData.evil_perks.cosmic_dominance || 0;
 	}
+	return 0;
 }
 
 /**
  * @param {number} evilperknum
  */
 function buyEvilPerk(evilperknum) {
+	let cost = getEvilPerkCost(evilperknum);
+	if (gameData.evil_perks_points < cost) return;
+
 	switch (evilperknum) {
 		case 1:
-			if (gameData.evil_perks_points >= getEvilPerkCost(1)) {
-				gameData.evil_perks_points -= getEvilPerkCost(1)
-				gameData.evil_perks.reduce_eye_requirement += 1
-			}
-			break
+			gameData.evil_perks_points -= cost;
+			gameData.evil_perks.reduce_eye_requirement = (gameData.evil_perks.reduce_eye_requirement || 0) + 1;
+			break;
 		case 2:
-			if (gameData.evil_perks_points >= getEvilPerkCost(2)) {
-				gameData.evil_perks_points -= getEvilPerkCost(2)
-				gameData.evil_perks.reduce_evil_requirement += 1
-			}
-			break
+			gameData.evil_perks_points -= cost;
+			gameData.evil_perks.reduce_evil_requirement = (gameData.evil_perks.reduce_evil_requirement || 0) + 1;
+			break;
 		case 3:
-			if (gameData.evil_perks_points >= getEvilPerkCost(3)) {
-				gameData.evil_perks_points -= getEvilPerkCost(3)
-				gameData.evil_perks.reduce_the_void_requirement += 1
-			}
-			break
+			gameData.evil_perks_points -= cost;
+			gameData.evil_perks.reduce_the_void_requirement = (gameData.evil_perks.reduce_the_void_requirement || 0) + 1;
+			break;
 		case 4:
-			if (gameData.evil_perks_points >= getEvilPerkCost(4)) {
-				gameData.evil_perks_points -= getEvilPerkCost(4)
-				gameData.evil_perks.reduce_celestial_requirement += 1
-			}
-			break
+			gameData.evil_perks_points -= cost;
+			gameData.evil_perks.reduce_celestial_requirement = (gameData.evil_perks.reduce_celestial_requirement || 0) + 1;
+			break;
 		case 5:
-			if (gameData.evil_perks_points >= getEvilPerkCost(5)) {
-				gameData.evil_perks_points -= getEvilPerkCost(5)
-				gameData.evil_perks.receive_essence += 1
-				gameData.essence += getEssenceReward()
-			}
-			break
+			gameData.evil_perks_points -= cost;
+			gameData.evil_perks.receive_essence = (gameData.evil_perks.receive_essence || 0) + 1;
+			gameData.essence += getEssenceReward();
+			break;
 		case 6:
-			if (gameData.evil_perks_points >= getEvilPerkCost(6)) {
-				gameData.evil_perks_points -= getEvilPerkCost(6)
-				gameData.evil_perks.dark_velocity = (gameData.evil_perks.dark_velocity || 0) + 1
-			}
-			break
+			gameData.evil_perks_points -= cost;
+			gameData.evil_perks.dark_velocity = (gameData.evil_perks.dark_velocity || 0) + 1;
+			break;
 		case 7:
-			if (gameData.evil_perks_points >= getEvilPerkCost(7)) {
-				gameData.evil_perks_points -= getEvilPerkCost(7)
-				gameData.evil_perks.abyssal_wisdom = (gameData.evil_perks.abyssal_wisdom || 0) + 1
-			}
-			break
+			gameData.evil_perks_points -= cost;
+			gameData.evil_perks.abyssal_wisdom = (gameData.evil_perks.abyssal_wisdom || 0) + 1;
+			break;
 		case 8:
-			if (gameData.evil_perks_points >= getEvilPerkCost(8)) {
-				gameData.evil_perks_points -= getEvilPerkCost(8)
-				gameData.evil_perks.void_resonance = (gameData.evil_perks.void_resonance || 0) + 1
-			}
-			break
+			gameData.evil_perks_points -= cost;
+			gameData.evil_perks.void_resonance = (gameData.evil_perks.void_resonance || 0) + 1;
+			break;
 		case 9:
-		if (gameData.evil_perks_points >= getEvilPerkCost(9)) {
-			gameData.evil_perks_points -= getEvilPerkCost(9);
+			gameData.evil_perks_points -= cost;
 			gameData.evil_perks.cosmic_dominance = (gameData.evil_perks.cosmic_dominance || 0) + 1;
-		}
-		break;
+			break;
 	}
 }
 
@@ -284,27 +268,14 @@ function buyEvilPerk(evilperknum) {
  * @param {number} i
  */
 function hasEvilPerk(i) {
-	switch (i) {
-		case 1: return gameData.evil_perks.reduce_eye_requirement > 0
-		case 2: return gameData.evil_perks.reduce_evil_requirement > 0
-		case 3: return gameData.evil_perks.reduce_the_void_requirement > 0
-		case 4: return gameData.evil_perks.reduce_celestial_requirement > 0
-		case 5: return gameData.evil_perks.receive_essence > 0
-		case 6: return (gameData.evil_perks.dark_velocity || 0) > 0;
-		case 7: return (gameData.evil_perks.abyssal_wisdom || 0) > 0;
-		case 8: return (gameData.evil_perks.void_resonance || 0) > 0;
-		case 9: return (gameData.evil_perks.cosmic_dominance || 0) > 0;
-	}
-	return false
+	return getEvilPerkRank(i) > 0;
 }
 
 /**
- * 
  * @returns {number}
  */
 function getAge0Requirement() {
 	const eyeReq = getEyeRequirement();
-
 	const ageMap = {
 		65: 25, 60: 25, 55: 25, 50: 25, 45: 25, 40: 25,
 		35: 20, 30: 20,
@@ -312,17 +283,14 @@ function getAge0Requirement() {
 		20: 16,
 		15: 13
 	};
-
-	return ageMap[eyeReq];
+	return ageMap[eyeReq] || 25;
 }
 
 /**
- * 
  * @returns {number}
  */
 function getAge1Requirement() {
 	const eyeReq = getEyeRequirement();
-
 	const ageMap = {
 		65: 45, 60: 45, 55: 45, 50: 45,
 		45: 40,
@@ -333,7 +301,5 @@ function getAge1Requirement() {
 		20: 18,
 		15: 14
 	};
-
-	return ageMap[eyeReq];
+	return ageMap[eyeReq] || 45;
 }
-
