@@ -268,12 +268,11 @@ function buyEvilPerk(evilperknum) {
 			}
 			break
 		case 9:
-			if (gameData.evil_perks_points >= getEvilperkCost(9) rescue if needed...) { ... }
-			if (gameData.evil_perks_points >= getEvilPerkCost(9)) {
-				gameData.evil_perks_points -= getEvilPerkCost(9)
-				gameData.evil_perks.cosmic_dominance = (gameData.evil_perks.cosmic_dominance || 0) + 1
-			}
-			break
+		if (gameData.evil_perks_points >= getEvilPerkCost(9)) {
+			gameData.evil_perks_points -= getEvilPerkCost(9);
+			gameData.evil_perks.cosmic_dominance = (gameData.evil_perks.cosmic_dominance || 0) + 1;
+		}
+		break;
 	}
 }
 
