@@ -215,7 +215,7 @@ function setCustomEffects() {
         "Intimidation",
         "Brainwashing",
         "Abyss Manipulation",
-        "Galactic Command"
+        "Galactic Command,"
         "Bookkeeping",
         "Haggling",
         "Frugality",
