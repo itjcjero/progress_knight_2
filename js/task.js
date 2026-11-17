@@ -74,6 +74,8 @@ class Task {
 
         /** @type {Item[]} */
         this.xpItems = []
+
+        this.updateMaxXP(this.level, this.isHero, this.maxXpBase, this.pow10heroxp, this.heroShift);
     }
 
     toJSON() {
@@ -165,6 +167,18 @@ class Task {
 
     getMaxXpFormatted() {
         return this.maxXP.toExponential(2);
+    }
+
+    getXpLeft() {
+        if (!this.maxXP || this.maxXP.lte(1)) {
+            this.updateMaxXP(this.level, this.isHero, this.maxXpBase, this.pow10heroxp, this.heroShift);
+        }
+        if (this.xp.gte(this.maxXP)) return new Decimal(0);
+        return this.maxXP.minus(this.xp);
+    }
+
+    getXpLeftFormatted() {
+        return formatTaskXp(this.getXpLeft());
     }
 
     getGameDaysLeft() {

@@ -77,14 +77,41 @@
 }
 
 /* job skill */
-#skillTable.no-max1 .tr,
-#jobTable.no-max1 .tr {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 0.8fr) minmax(0, 2fr);
+#skillTable .tr,
+#jobTable .tr {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 0.8fr) minmax(0, 1.8fr) minmax(0, 1.1fr) minmax(0, 0.8fr);
 }
 
+#skillTable.no-max .tr,
+#jobTable.no-max .tr,
+#skillTable.no-max1 .tr,
+#jobTable.no-max1 .tr {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 0.8fr) minmax(0, 1.8fr) minmax(0, 1.1fr);
+}
+
+#skillTable.no-max .max-level,
+#jobTable.no-max .max-level,
 #skillTable.no-max1 .max-level,
-#jobTable.no-max1 .max-level {
+#jobTable.no-max1 .max-level,
+#skillTable.no-max .maxLevel,
+#jobTable.no-max .maxLevel,
+#skillTable.no-max1 .maxLevel,
+#jobTable.no-max1 .maxLevel {
     display: none !important;
+}
+
+.xpLeft,
+.xp-left {
+    text-align: right;
+    justify-self: end;
+    padding-right: 0.5em;
+    width: 100%;
+}
+
+.xp-left-header {
+    text-align: right;
+    justify-self: end;
+    padding-right: 0.5em;
 }
 
 #itemTable .tr {

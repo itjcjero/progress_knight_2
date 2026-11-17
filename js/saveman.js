@@ -45,6 +45,7 @@ function restorePrototypes() {
 
 
         task.xp = new Decimal(task.xp || 0)
+        task.updateMaxXP(task.level, task.isHero, task.maxXpBase, task.pow10heroxp, task.heroShift)
         gameData.taskData[key] = task
     }
 

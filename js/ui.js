@@ -482,6 +482,7 @@ function renderTaskRow(task) {
     renderProgressBar(task, progressFill, progressBar);
 
     safeUpdateText(`${row} .level`, formatLevel(task.level));
+    safeUpdateText(`${row} .xpLeft`, task.getXpLeftFormatted());
     safeUpdateText(`${row} .maxLevel`, formatLevel(task.maxLevel));
 }
 
