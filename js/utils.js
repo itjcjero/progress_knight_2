@@ -49,67 +49,39 @@ function fastFloorToString(number, decimals) {
 }
 
 /**
- * 
- * @param {number | Decimal} number 
+ * @param {number} value 
  * @param {number} decimals 
  * @returns 
  */
-function format(number, decimals = 1) {
-    if (number === Infinity)
-        return "Infinity"
-    if (number === null || number === undefined)
-        return "0"
+function format(value, decimals = 1) {
+    if (value === Infinity || isNaN(value))
+        return "Infinity";
+    if (value <= 0)
+        return fastFloorToString(value, decimals);
 
     const units = ["", "k", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "O", "N", "D", "Ud", "Dd", "Td", "Qad", "Qid", "Sxd", "Spd", "Od", "Nd", "V", "Uv", "Dv", "Tv",
         "Qav", "Qiv", "Sxv", "Spv", "Ov", "Nv", "Tr", "Ut", "Dt", "Tt"]
 
-    if (number instanceof Decimal) {
-        if (number.isNaN()) return "NaN"
-        if (!number.isFinite()) return "Infinity"
-        if (number.eq(0)) return "0"
-        if (number.lt(0)) return "-" + format(number.neg(), decimals)
-
-        const tier = Math.floor(number.e / 3)
-        if (tier <= 0) return fastFloorToString(number.toNumber(), decimals)
-
-        if ((gameData.settings.numberNotation == 0 || tier < 3) && (tier < units.length)) {
-            const suffix = units[tier];
-            const scale = Math.pow(10, number.e - tier * 3);
-            const scaled = number.m * scale;
-            return fastFloorToString(scaled, decimals) + suffix;
-        } else {
-            if (gameData.settings.numberNotation == 1) {
-                return fastFloorToString(number.m, decimals) + "e" + number.e;
-            } else {
-                const exp = tier * 3;
-                const scale = Math.pow(10, number.e - exp);
-                const scaled = number.m * scale;
-                return fastFloorToString(scaled, decimals) + "e" + exp;
-            }
-        }
-    }
-
     // what tier? (determines SI symbol)
-    const tier = log10(number) / 3 | 0;
-    if (tier <= 0) return fastFloorToString(number, decimals)
+    const tier = log10(value) / 3 | 0;
+    if (tier <= 0) return fastFloorToString(value, decimals)
 
     if ((gameData.settings.numberNotation == 0 || tier < 3) && (tier < units.length)) {
         const suffix = units[tier];
         const scale = pow(10, tier * 3);
-        const scaled = number / scale;
+        const scaled = value / scale;
         return fastFloorToString(scaled, decimals) + suffix;
     } else {
         if (gameData.settings.numberNotation == 1) {
-            const exp = log10(number) | 0;
+            const exp = log10(value) | 0;
             const scale = pow(10, exp);
-            const scaled = number / scale;
+            const scaled = value / scale;
             return fastFloorToString(scaled, decimals) + "e" + exp;
-        }
-        else {
-            const exp = log10(number) / 3 | 0;
-            const scale = pow(10, exp * 3);
-            const scaled = number / scale;
-            return fastFloorToString(scaled, decimals) + "e" + exp * 3;
+        } else {
+            const exp = (log10(value) / 3 | 0) * 3;
+            const scale = pow(10, exp);
+            const scaled = value / scale;
+            return fastFloorToString(scaled, decimals) + "e" + exp;
         }
     }
 }
