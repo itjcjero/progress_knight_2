@@ -121,6 +121,12 @@ function addMultipliers() {
             "Brainwashing",
             "Abyss Manipulation",
             "Galactic Command",
+            "Bookkeeping", 
+            "Haggling", 
+            "Frugality", 
+            "Fear Aura", 
+            "Null Dominion", 
+            "Celestial Decree"
         ];
         for (let i = 0; i < expenseNames.length; i++) {
             const t = skillData[expenseNames[i]];
@@ -210,6 +216,12 @@ function setCustomEffects() {
         "Brainwashing",
         "Abyss Manipulation",
         "Galactic Command"
+        "Bookkeeping",
+        "Haggling",
+        "Frugality",
+        "Fear Aura", 
+        "Null Dominion", 
+        "Celestial Decree"
     ];
 
     for (const name of taskNames) {
