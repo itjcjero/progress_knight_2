@@ -9,6 +9,7 @@
  * The configuration object mapping perk IDs to their respective formulas.
  * @typedef {Record<number, EvilPerkConfigElement>} EvilPerkConfig
  */
+
 /** 
  * Global object acting as a pre-calculated cost cache for each perk ID.
  * Contains arrays where the index equals the perk level, and the value is the cost.
@@ -19,7 +20,11 @@ const evilPerkCostsCache = {
 	2: [],
 	3: [],
 	4: [],
-	5: []
+	5: [],
+	6: [],
+	7: [],
+	8: [],
+	9: []
 };
 
 /**
@@ -61,22 +66,21 @@ function initEvilPerkCostsCache() {
 		// Anything at or above the limit returns Infinity
 		cache.push(Infinity);
 
-		evilPerkCostsCache[num] = cache;
+		evilPerkCostsCache[perkId] = cache;
 	}
 }
 
-initEvilPerkCostsCache()
-
+initEvilPerkCostsCache();
 
 function getEvilPerksGeneration() {
-	if (gameData.evil == 0) return 0
-	let essence_perk_buff_mult = 1e9
+	if (gameData.evil == 0) return 0;
+	let essence_perk_buff_mult = 1e9;
 	if (gameData.essence == 0)
-		essence_perk_buff_mult = 10
+		essence_perk_buff_mult = 10;
 	else if (gameData.essence < 1e308 / essence_perk_buff_mult)
-		essence_perk_buff_mult *= gameData.essence
+		essence_perk_buff_mult *= gameData.essence;
 	else
-		essence_perk_buff_mult = 1e308
+		essence_perk_buff_mult = 1e308;
 
 	// Bônus multiplicativo opcional dos novos perks de endgame (Dark Velocity - Rank 6)
 	let darkVelocityBonus = 1;
