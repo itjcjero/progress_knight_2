@@ -19,7 +19,7 @@ function addMultipliers() {
             getTimeIsAFlatCircleXP
         );
 
-        // Baseline task pointers
+        // Baseline task pointers ("All XP")
         const baseTasks = [
             "Dark Influence",
             "Demon Training",
@@ -27,6 +27,19 @@ function addMultipliers() {
             "Parallel Universe",
             "Immortal Ruler",
             "Blinded By Darkness",
+            "Shadow Whisper",
+            "Hellfire",
+            "Apocalypse",
+            "Void Step",
+            "Singularity",
+            "Gravity Control",
+            "Galactic Harmony",
+            "Omnipotence",
+            "Infinity Spark",
+            "Absolute Authority",
+            "Nightmare",
+            "Darkness Incarnate",
+            "Omega Darkness"
         ];
         for (let i = 0; i < baseTasks.length; i++) {
             const t = skillData[baseTasks[i]];
@@ -38,15 +51,46 @@ function addMultipliers() {
             const incFuncs = task.incomeFuncs;
             const incTasks = task.incomeTasks;
 
-            incTasks.push(skillData["Demon's Wealth"]);
+            // Hero Pay
+            const heroPayTasks = ["Demon's Wealth", "Demonic Pact", "Dark Sovereign"];
+            for (const name of heroPayTasks) {
+                if (skillData[name]) incTasks.push(skillData[name]);
+            }
             incFuncs.push(getLifeCoachIncomeGain);
 
-            xpTasks.push(skillData["Productivity"]);
-            xpTasks.push(skillData["Dark Knowledge"]);
-            xpItems.push(itemData["Personal Squire"]);
-        } else if (task instanceof Skill) {
-            xpTasks.push(skillData["Concentration"]);
+            // Hero XP (Skills & Items)
+            const heroXpTasks = ["Productivity", "Dark Knowledge", "Time Management", "Discipline", "Forbidden Tome"];
+            for (const name of heroXpTasks) {
+                if (skillData[name]) xpTasks.push(skillData[name]);
+            }
 
+            const heroXpItems = ["Personal Squire", "Lantern", "Philosopher's Stone", "Aether Engine"];
+            for (const name of heroXpItems) {
+                if (itemData[name]) xpItems.push(itemData[name]);
+            }
+        } else if (task instanceof Skill) {
+            // Skill XP (Skills)
+            const skillXpTasks = [
+                "Concentration",
+                "Void Symbiosis",
+                "Evil Incarnate",
+                "Dark Prince",
+                "Posture",
+                "Memory Palace",
+                "Divination",
+                "Void Sight",
+                "Void Convergence",
+                "Cosmic Awareness",
+                "Omniscience",
+                "Multiverse Sight",
+                "Dark Herald",
+                "Nether King"
+            ];
+            for (const name of skillXpTasks) {
+                if (skillData[name]) xpTasks.push(skillData[name]);
+            }
+
+            // Skill XP (Items)
             const skillItems = [
                 "Book",
                 "Study Desk",
@@ -54,53 +98,111 @@ function addMultipliers() {
                 "Void Blade",
                 "Universe Fragment",
                 "Custom Galaxy",
+                "Quill & Ink",
+                "Silver Astrolabe",
+                "Chronometer",
+                "Rift Compass",
+                "Cosmic Pendulum",
+                "Dimensional Key",
+                "Quantum Processor",
+                "Chronos Hourglass",
+                "Multiverse Loom",
+                "Omega Codex"
             ];
             for (let i = 0; i < skillItems.length; i++) {
                 const it = itemData[skillItems[i]];
                 if (it) xpItems.push(it);
             }
-
-            xpTasks.push(skillData["Void Symbiosis"]);
-            xpTasks.push(skillData["Evil Incarnate"]);
-            xpTasks.push(skillData["Dark Prince"]);
         }
 
+        // Category-specific multipliers
         if (jobCategories["Military"].includes(task.name)) {
-            jobData[task.name].incomeTasks.push(skillData["Strength"]);
-            xpTasks.push(skillData["Battle Tactics"]);
-            xpItems.push(itemData["Steel Longsword"]);
+            const milPayTasks = ["Strength", "Shield Defense", "Formation", "Iron Body", "Warlord Aura"];
+            for (const name of milPayTasks) {
+                if (skillData[name]) jobData[task.name].incomeTasks.push(skillData[name]);
+            }
+
+            const milXpTasks = ["Battle Tactics", "Swordsmanship", "Weapon Mastery", "War Strategy"];
+            for (const name of milXpTasks) {
+                if (skillData[name]) xpTasks.push(skillData[name]);
+            }
+
+            const milXpItems = ["Steel Longsword", "Iron Shield", "War Banner"];
+            for (const name of milXpItems) {
+                if (itemData[name]) xpItems.push(itemData[name]);
+            }
         } else if (task.name === "Strength") {
-            xpTasks.push(skillData["Muscle Memory"]);
-            xpItems.push(itemData["Dumbbells"]);
+            xpTasks.push(skillData["Muscle Memory"], skillData["Endurance"], skillData["Conditioning"]);
+            xpItems.push(itemData["Dumbbells"], itemData["Whetstone"]);
+        } else if (skillCategories["Combat"].includes(task.name)) {
+            xpTasks.push(skillData["Footwork"], skillData["Parry"], skillData["Battle Instinct"]);
         } else if (skillCategories["Magic"].includes(task.name)) {
-            xpItems.push(itemData["Sapphire Charm"]);
-            xpItems.push(itemData["Observatory"]);
-            xpTasks.push(skillData["Universal Ruler"]);
+            const magicItems = ["Sapphire Charm", "Observatory", "Alchemy Kit", "Enchanted Quill", "Arcane Focus", "Crystal Ball"];
+            for (const name of magicItems) {
+                if (itemData[name]) xpItems.push(itemData[name]);
+            }
+
+            const magicTasks = ["Universal Ruler", "Arcane Flow", "Mana Fountain", "Reality Bending", "Eclipse", "Eternal Night"];
+            for (const name of magicTasks) {
+                if (skillData[name]) xpTasks.push(skillData[name]);
+            }
             xpFuncs.push(getTaaAndMagicXpGain);
         } else if (skillCategories["Void Manipulation"].includes(task.name)) {
-            xpItems.push(itemData["Void Necklace"]);
-            xpItems.push(itemData["Void Orb"]);
+            xpItems.push(
+                itemData["Void Necklace"],
+                itemData["Void Orb"],
+                itemData["Abyssal Tome"],
+                itemData["Void Crystal"]
+            );
         } else if (jobCategories["The Arcane Association"].includes(task.name)) {
-            xpTasks.push(skillData["Mana Control"]);
+            xpTasks.push(skillData["Mana Control"], skillData["Spellcasting"], skillData["Enchantment"]);
             xpFuncs.push(getTaaAndMagicXpGain);
 
             const arcaneJob = jobData[task.name];
             if (arcaneJob) {
-                arcaneJob.incomeTasks.push(skillData["All Seeing Eye"]);
+                arcaneJob.incomeTasks.push(
+                    skillData["All Seeing Eye"],
+                    skillData["Runic Lore"],
+                    skillData["Telekinesis"],
+                    skillData["Archmage Will"]
+                );
             }
+        } else if (jobCategories["Alchemy & Artificing"].includes(task.name)) {
+            if (skillData["Alchemy Mastery"]) xpTasks.push(skillData["Alchemy Mastery"]);
         } else if (jobCategories["The Void"].includes(task.name)) {
-            xpTasks.push(skillData["Void Amplification"]);
-            xpItems.push(itemData["Void Armor"]);
-            xpItems.push(itemData["Void Dust"]);
+            xpTasks.push(
+                skillData["Void Amplification"],
+                skillData["Entropy Touch"],
+                skillData["Oblivion Gaze"],
+                skillData["Abyssal Ascension"]
+            );
+            xpItems.push(
+                itemData["Void Armor"],
+                itemData["Void Dust"],
+                itemData["Void Gauntlets"],
+                itemData["Null Crown"]
+            );
         } else if (jobCategories["Galactic Council"].includes(task.name)) {
-            xpItems.push(itemData["Celestial Robe"]);
-            xpTasks.push(skillData["Epiphany"]);
+            xpItems.push(
+                itemData["Celestial Robe"],
+                itemData["Star Map"],
+                itemData["Nebula Core"],
+                itemData["Galactic Scepter"]
+            );
+            xpTasks.push(
+                skillData["Epiphany"],
+                skillData["Nebula Weaving"],
+                skillData["Quasar Pulse"],
+                skillData["Transcendence"]
+            );
         } else if (skillCategories["Dark Magic"].includes(task.name)) {
+            if (skillData["Corruption"]) xpTasks.push(skillData["Corruption"]);
             xpFuncs.push(getEvilXpGain);
         } else if (skillCategories["Almightiness"].includes(task.name)) {
             xpFuncs.push(getEssenceXpGain);
         } else if (skillCategories["Fundamentals"].includes(task.name)) {
-            xpItems.push(itemData["Mind's Eye"]);
+            xpItems.push(itemData["Mind's Eye"], itemData["Merchant Ledger"]);
+            xpTasks.push(skillData["Focus"], skillData["Speed Reading"]);
         } else if (skillCategories["Darkness"].includes(task.name)) {
             xpFuncs.push(getDarknessXpGain);
         }
@@ -121,11 +223,11 @@ function addMultipliers() {
             "Brainwashing",
             "Abyss Manipulation",
             "Galactic Command",
-            "Bookkeeping", 
-            "Haggling", 
-            "Frugality", 
-            "Fear Aura", 
-            "Null Dominion", 
+            "Bookkeeping",
+            "Haggling",
+            "Frugality",
+            "Fear Aura",
+            "Null Dominion",
             "Celestial Decree"
         ];
         for (let i = 0; i < expenseNames.length; i++) {
