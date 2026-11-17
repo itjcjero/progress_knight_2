@@ -49,22 +49,49 @@ function fastFloorToString(number, decimals) {
 }
 
 /**
- * @param {number} value 
+ * @param {number | Decimal} value 
  * @param {number} decimals 
- * @returns 
+ * @returns {string}
  */
 function format(value, decimals = 1) {
-    if (value === Infinity || isNaN(value))
+    if (value instanceof Decimal) {
+        if (!Number.isFinite(value.mantissa)) return "Infinity";
+        if (value.lte(0)) return fastFloorToString(0, decimals);
+
+        const units = ["", "k", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "O", "N", "D", "Ud", "Dd", "Td", "Qad", "Qid", "Sxd", "Spd", "Od", "Nd", "V", "Uv", "Dv", "Tv",
+            "Qav", "Qiv", "Sxv", "Spv", "Ov", "Nv", "Tr", "Ut", "Dt", "Tt"];
+
+        const tier = floor(value.log10() / 3);
+        if (tier <= 0) return fastFloorToString(value.toNumber(), decimals);
+
+        if ((gameData.settings.numberNotation == 0 || tier < 3) && (tier < units.length)) {
+            const suffix = units[tier];
+            const scaled = value.div(Decimal.pow(10, tier * 3)).toNumber();
+            return fastFloorToString(scaled, decimals) + suffix;
+        } else {
+            if (gameData.settings.numberNotation == 1) {
+                const exp = floor(value.log10());
+                const scaled = value.div(Decimal.pow(10, exp)).toNumber();
+                return fastFloorToString(scaled, decimals) + "e" + exp;
+            } else {
+                const exp = tier * 3;
+                const scaled = value.div(Decimal.pow(10, exp)).toNumber();
+                return fastFloorToString(scaled, decimals) + "e" + exp;
+            }
+        }
+    }
+
+    if (value === Infinity || Number.isNaN(value))
         return "Infinity";
     if (value <= 0)
         return fastFloorToString(value, decimals);
 
     const units = ["", "k", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "O", "N", "D", "Ud", "Dd", "Td", "Qad", "Qid", "Sxd", "Spd", "Od", "Nd", "V", "Uv", "Dv", "Tv",
-        "Qav", "Qiv", "Sxv", "Spv", "Ov", "Nv", "Tr", "Ut", "Dt", "Tt"]
+        "Qav", "Qiv", "Sxv", "Spv", "Ov", "Nv", "Tr", "Ut", "Dt", "Tt"];
 
     // what tier? (determines SI symbol)
     const tier = log10(value) / 3 | 0;
-    if (tier <= 0) return fastFloorToString(value, decimals)
+    if (tier <= 0) return fastFloorToString(value, decimals);
 
     if ((gameData.settings.numberNotation == 0 || tier < 3) && (tier < units.length)) {
         const suffix = units[tier];
