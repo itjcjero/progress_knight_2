@@ -39,7 +39,7 @@ function initEvilPerkCostsCache() {
 				? pow(5, lvl + 1) + 6666 - 5
 				: pow(6.66, lvl + 1) - 666 * 33 - 5e6
 		},
-		5: { max: 309, calc: (lvl) => pow(10, lvl) * 6.66e10 } // Для 5 кейса предел ~308-309 по условию 1e308
+		5: { max: 309, calc: (lvl) => pow(10, lvl) * 6.66e10 }, // <--- VÍRGULA ADICIONADA AQUI!
 		6: { max: 5, calc: (lvl) => pow(10, lvl + 1) * 1e15 },   // Reduz o custo de reset / penalidades leves
 		7: { max: 10, calc: (lvl) => pow(8, lvl + 1) * 1e25 },   // Bônus moderado de XP em Void
 		8: { max: 10, calc: (lvl) => pow(15, lvl + 1) * 1e40 },  // Multiplicador de Dark Matter balanceado
