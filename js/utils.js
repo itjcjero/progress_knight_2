@@ -396,7 +396,7 @@ function toId(str) {
     for (let i = 0; i < str.length; i++) {
         const code = str.charCodeAt(i);
         // 32 — код пробела, 39 — код одинарной кавычки
-        if (code !== 32 && code !== 39) {
+            if (code !== 32 && code !== 39 && code !== 38) { // 32 espaço, 39 apóstrofo, 38 '&' (inválido em seletor CSS)
             result += str[i];
         }
     }
