@@ -235,10 +235,42 @@ const tooltips = {
     "Speed speed speed": "You can affect the speed of the universe with your gigantic amount of Dark Matter.",
     "Dark Matter Millionaire": "This secret spell will help you reach your quest to become the first Dark Matter millionaire.",
     "The new Dark Matter": "Your amulet tears space and time through all multiverses. Welcome to Metaverse.",
-
     "Ruler of the Metaverse": "Now you are thinking with portals",
     "A New Hope": "No more of this Faint Hope nonsense!!!",
     "Time is a flat circle": "This is a world where nothing is solved. Someone once told me, time is a flat circle. Everything we’ve ever done or will do, we’re gonna do over and over and over again.",
     "The End is near": "We don't try to live forever",
     "The End": "There is always an end",
+    // --- NOVAS SKILLS ---
+    "Shadow Mastery": "Mastery over shadows increases Dark Matter gain by 5% per level.",
+    "Abyssal Focus": "Focusing your mind through the void boosts Essence gain.",
+    "Temporal Shield": "Warp time around yourself to mitigate aging effects.",
+    "Singularity Mind": "Your consciousness spans across multiple quantum dimensions.",
+    // (Adicione as demais 92 skills expandidas seguindo esse mesmo padrão de descrição temática curta)
+
+    // --- NOVAS PROPRIEDADES E ITENS ---
+    "Shack": "A humble shelter to rest your head.",
+    "Tent": "Better than sleeping directly on the mud.",
+    "Wooden Hut": "Sturdy enough to withstand light winds.",
+    "Cottage": "A cozy place in the countryside.",
+    // (...)
+    "Infinity Prism": "Refracts light through infinite realities.",
+    "Essence Condenser": "Condenses raw essence into pure power.",
+    "Astral Crown": "Worn only by rulers of the astral plane.",
+    "Reality Anchor": "Anchors your timeline against temporal anomalies.",
+    "Seraphic Halo": "Radiates celestial light, boosting total happiness.",
+    "Shadow Cloak": "Cloaks your presence in absolute darkness to harvest Evil.",
+    "Abyss Heart": "The beating core of the dark abyss.",
+    "Infernal Throne": "Sit upon the throne of hell itself.",
+    "Dark Matter Reactor": "Generates limitless Dark Matter.",
+    "Singularity Engine": "Harnesses the power of collapsing stars.",
+    "Void Singularity": "A single point containing infinite void.",
+    "Reality Compiler": "Compiles reality code to rewrite the universe.",
+
+    // --- NOVOS EVIL PERKS ---
+    "EvilPerk6Name": "Dark Velocity",
+    "EvilPerk6Desc": "Accelerates the base speed of the universe using accumulated Evil.",
+    "EvilPerk7Name": "Abyssal Wisdom",
+    "EvilPerk8Name": "Void Resonance",
+    "EvilPerk9Name": "Cosmic Dominance",
+    
 }
